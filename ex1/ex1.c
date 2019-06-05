@@ -8,7 +8,7 @@
 
 int main(void)
 {
-    // Your code here
+    // initial push
 
     return 0;
 }
