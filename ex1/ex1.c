@@ -8,7 +8,25 @@
 
 int main(void)
 {
-    // Your code here
+    int x = 100;
+
+    printf("PID before fork is %d\n", (int) getpid());
+    printf("Parent value for x is %d\n", x);
+
+    int rc = fork();
+
+    if (rc < 0) {
+        printf(stderr, "Fork failed\n");
+    } else if (rc == 0) {
+        printf("If rc == 0 child PID is %d\n", (int) getpid());
+        printf("Child value for x if rc == 0 is %d\n", x);
+    } else {
+       int x = 500;
+       printf("If rc > 0 this is the parent PID %d of child %d\n", (int) getpid(), rc);
+       printf("If rc > 0 the child value for x is %d\n", x); 
+    }
 
     return 0;
 }
+
+// gcc -Wall -Wextra -o ex1 ex1.c

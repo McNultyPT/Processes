@@ -16,7 +16,32 @@ char* msg3 = "hello world #3";
 
 int main(void)
 {
-    // Your code here
+    char inbuf[MSGSIZE];
+    int p[2];
     
+    pipe(p);
+
+    if (fork() == 0) {
+        close(p[0]);
+
+        printf("Child message\n");
+
+        write(p[1], msg1, MSGSIZE);
+        write(p[1], msg2, MSGSIZE);
+        write(p[1], msg3, MSGSIZE);
+
+        close(p[1]);
+    } else {
+        close(p[1]);
+
+        for (int i = 0; i < 3; i++) {
+            read(p[0], inbuf, MSGSIZE);
+            printf("Parent: %s\n", inbuf);
+        }
+
+        close(p[0]);
+    }
     return 0;
 }
+
+// gcc -Wall -Wextra -o ex5 ex5.c

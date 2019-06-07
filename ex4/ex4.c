@@ -10,7 +10,27 @@
 
 int main(void)
 {
-    // Your code here    
+    printf("Parent: %d\n", (int) getpid());
+    
+    int rc = fork();
 
+    if (rc < 0) {
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    } else if (rc == 0) {
+        printf("Child: %d\n", (int) getpid());
+
+        char *args[3];
+        args[0] = "ls";
+        args[1] = "-l";
+        args[2] = NULL;
+
+        execv("/bin/ls", args);
+    } else {
+        int wc = waitpid(rc, NULL, 0);
+        printf("Parent: %d of child %d\n", (int) getpid(), rc);
+    }
     return 0;
 }
+
+// gcc -Wall -Wextra -o ex4 ex4.c

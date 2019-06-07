@@ -20,7 +20,25 @@ and `clock_gettime()` should work just fine.
 
 int main()
 {
-    // Your code here
+    __uint64_t diff, sum;
+
+    struct timespec start, end;
+
+    for (int i = 0; i < number_iter; i++) {
+        clock_gettime(CLOCK_MONOTONIC, &start);
+
+        write(fileno(stdout), NULL, 0);
+        
+        clock_gettime(CLOCK_MONOTONIC, &end);
+
+        diff = BILLION * (end.tv_sec = start.tv_sec) + (end.tv_nsec - start.tv_nsec);
+
+        sum += diff;
+    }
+
+    printf("Time elapsed: %f nanoseconds\n", sum / (float) number_iter);
     
     return 0;
 }
+
+// gcc -Wall -Wextra -o ex6 ex6.c
